@@ -1,10 +1,23 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+
+header("HTTP/1.1 200 OK");
+
+
+$method = $_SERVER['REQUEST_METHOD'];
+if($method == "OPTIONS") {
+    die();
+}
+
 define('WP_USE_THEMES', false);
 require('./wp-blog-header.php');
 
 
-if($_GET['idcliente']){
-    $idcliente = $_GET['idcliente'];
+if($_GET['idCliente']){
+    $idcliente = $_GET['idCliente'];
 }
 
 
@@ -70,7 +83,9 @@ if($client->num_rows > 0){
     $update = mysqli_query($conn, $sql_up);
 
     if($update){
-        echo json_encode($total_videos);
+    header('content-type: application/json; charset=utf-8');
+
+        wp_send_json($total_videos);
     }
     
     /**/
@@ -85,7 +100,9 @@ if($client->num_rows > 0){
   $total_videos['receta'] = $gallery_arr[1];
   $total_videos['exito'] =  $gallery_arr[2];
   if($insert){
-        echo json_encode($total_videos);
+  header('content-type: application/json; charset=utf-8');
+
+        wp_send_json($total_videos);
   }
 }
 
